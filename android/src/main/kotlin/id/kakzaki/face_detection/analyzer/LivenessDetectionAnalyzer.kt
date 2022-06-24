@@ -137,7 +137,7 @@ class LivenessDetectionAnalyzer(
                 startHoldStillTimemilis = System.currentTimeMillis()
             else{
                 startHoldStillTimemilis?.let {
-                    if((System.currentTimeMillis() - it) > 2000){
+                    if((System.currentTimeMillis() - it) > 500){
                         nextDetection()
                     }
                 }
@@ -150,7 +150,7 @@ class LivenessDetectionAnalyzer(
 
     private fun detectSmile(face: Face){
         Log.d(TAG, "Smile Probability ${face.smilingProbability}")
-        if (face.smilingProbability?:0f > 0.8f){
+        if ((face.smilingProbability ?: 0f) > 0.8f){
             nextDetection()
         }
     }

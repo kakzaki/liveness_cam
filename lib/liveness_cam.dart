@@ -8,11 +8,11 @@ class LivenessCam {
   Future<File?> start() async {
     try {
       var result = await _methodChannel.invokeMethod("start");
-      if (result != null) {
-        return File("$result".replaceAll("file:/", ""));
+      if ("$result" != "null"&&"$result" != "") {
+          return File("$result".replaceAll("file:/", ""));
       }
     } catch (e) {
-      rethrow;
+      return null;
     }
     return null;
   }

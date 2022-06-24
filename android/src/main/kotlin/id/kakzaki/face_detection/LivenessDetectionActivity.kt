@@ -204,6 +204,6 @@ class LivenessDetectionActivity : BaseCameraActivity(), LivenessDetectionListene
 
     companion object {
         private const val TAG = "Liveness Detection"
-        private const val COUNTDOWN_TIME = 20
+        private const val COUNTDOWN_TIME = 60
     }
 }
