@@ -1,7 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:liveness_cam/liveness_cam.dart';
 
@@ -36,7 +33,7 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: InkWell(
               onTap: () {
-                _livenessCam.start();
+                _livenessCam.start(context);
               },
               child: Column(
                 children: [
@@ -46,7 +43,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        _livenessCam.start().then((value) {
+                        _livenessCam.start(context).then((value) {
                           if (value != null) {
                             setState(() {
                               result = value;

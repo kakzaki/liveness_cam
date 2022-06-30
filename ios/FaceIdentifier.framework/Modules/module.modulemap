@@ -1,6 +1,0 @@
-framework module FaceIdentifier {
-  umbrella header "FaceIdentifier.h"
-
-  export *
-  module * { export * }
-}

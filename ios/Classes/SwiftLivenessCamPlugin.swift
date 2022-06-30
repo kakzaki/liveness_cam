@@ -1,8 +1,7 @@
 import Flutter
 import UIKit
-import FaceIdentifier
 
-public class SwiftLivenessCamPlugin: NSObject, FlutterPlugin, FaceIdentifierDelegate {
+public class SwiftLivenessCamPlugin: NSObject, FlutterPlugin{
   var result :FlutterResult?
 
 
@@ -16,27 +15,10 @@ public class SwiftLivenessCamPlugin: NSObject, FlutterPlugin, FaceIdentifierDele
     self.result = result
 
     if call.method == "start" {
-      let viewController = UIApplication.shared.keyWindow?.rootViewController
-
-      if viewController != nil {
-            let client = FaceIdentifierClient()
-        client.delegate = self
-        client.showFaceIdentifier(viewController!)
-      } else {
-        result(FlutterError(code: "Unexpected nil", message: "Identifier-face: Could not retrieve rootViewController", details: "Expected rootViewController to be not nil"))
-      }
+      result(FlutterMethodNotImplemented)
     } else {
       result(FlutterMethodNotImplemented)
     }
   }
 
-  public func faceIdentifierResult(_ faceResult: FaceIdentifierResult) {
-      if let result = self.result {
-            if faceResult != nil {
-            result(faceResult.asJson())
-          } else {
-            result(FlutterError(code: "Unexpected nil", message: "Identifier-face: Could not retrieve face result", details: "Expected face result shouldn't be nil"))
-          }
-         }
-  }
 }
