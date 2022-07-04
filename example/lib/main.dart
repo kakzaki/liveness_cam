@@ -31,17 +31,15 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Liveness Cam'),
         ),
         body: Center(
-          child: InkWell(
-              onTap: () {
-                _livenessCam.start(context);
-              },
-              child: Column(
-                children: [
-                  result != null ? Image.file(result!) : Container(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
+          child: Column(
+            children: [
+              result != null ? Image.file(result!) : Container(),
+              const SizedBox(
+                height: 20,
+              ),
+              Builder(
+                builder: (context) {
+                  return ElevatedButton(
                       onPressed: () {
                         _livenessCam.start(context).then((value) {
                           if (value != null) {
@@ -54,9 +52,11 @@ class _MyAppState extends State<MyApp> {
                       child: const Text(
                         "Start",
                         style: TextStyle(fontSize: 19),
-                      ))
-                ],
-              )),
+                      ));
+                }
+              )
+            ],
+          ),
         ),
       ),
     );

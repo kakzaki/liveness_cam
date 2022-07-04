@@ -24,6 +24,7 @@ class LivenessCam {
         return null;
       }
     } catch (e) {
+      debugPrint("error: $e");
       return null;
     }
     return null;
