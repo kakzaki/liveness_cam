@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'scanned_image.dart';
 
@@ -54,7 +55,7 @@ class FaceIdentifier {
   }
 
   static Future<DetectedFace?> _detectFace({required visionImage}) async {
-    final options = FaceDetectorOptions();
+    final options = FaceDetectorOptions(enableContours: true,enableClassification: true,enableLandmarks: true,enableTracking: true);
     final faceDetector = FaceDetector(options: options);
     try {
       final List<Face> faces = await faceDetector.processImage(visionImage);
@@ -66,51 +67,57 @@ class FaceIdentifier {
     }
   }
 
+
   static _extractFace(List<Face> faces) {
     //List<Rect> rect = [];
-    bool wellPositioned = faces.isNotEmpty;
+    bool wellPositioned = false;
+    bool isSmiling = false;
+    bool isBlinking = false;
+    bool isMouthOpen = false;
     Face? detectedFace;
 
     for (Face face in faces) {
       // rect.add(face.boundingBox);
       detectedFace = face;
 
-      // Head is rotated to the right rotY degrees
-      if (face.headEulerAngleY! > 2 || face.headEulerAngleY! < -2) {
-        wellPositioned = false;
+      // Detect hold
+      if (face.headEulerAngleY! < 5 || face.headEulerAngleY! > -5) {
+        wellPositioned = true;
       }
-
-      // Head is tilted sideways rotZ degrees
-      if (face.headEulerAngleZ! > 2 || face.headEulerAngleZ! < -2) {
-        wellPositioned = false;
-      }
-
       // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
       // eyes, cheeks, and nose available):
-      final FaceLandmark? leftEar = face.landmarks[FaceLandmarkType.leftEar];
-      final FaceLandmark? rightEar = face.landmarks[FaceLandmarkType.rightEar];
-      if (leftEar != null && rightEar != null) {
-        if (leftEar.position.y < 0 ||
-            leftEar.position.x < 0 ||
-            rightEar.position.y < 0 ||
-            rightEar.position.x < 0) {
-          wellPositioned = false;
+      // final FaceContour? topLip = face.contours[FaceContourType.lowerLipTop];
+      // final FaceContour? bottomLip = face.contours[FaceContourType.upperLipBottom];
+
+      // if(wellPositioned==true){
+      //   if(topLip!=null && bottomLip!=null){
+      //     int delta= topLip.points[4].y - bottomLip.points[4].y;
+      //     if(delta>25){
+      //       isMouthOpen=true;
+      //     }
+      //     }
+      //   }
+
+      // if(wellPositioned==true){
+      //   print("right");
+      //   print(face.rightEyeOpenProbability);
+      //   print("left");
+      //   print(face.leftEyeOpenProbability);
+      //   double cek=(face.leftEyeOpenProbability??1.0);
+      //   double batas= 0.1;
+      //     if(cek<batas){
+      //       isBlinking=true;
+      //     }
+      // }
+
+      if(isMouthOpen=true){
+        if((face.smilingProbability??0)>0.8){
+          isSmiling=true;
         }
       }
 
-      if (face.leftEyeOpenProbability != null) {
-        if (face.leftEyeOpenProbability! < 0.5) {
-          wellPositioned = false;
-        }
-      }
-
-      if (face.rightEyeOpenProbability != null) {
-        if (face.rightEyeOpenProbability! < 0.5) {
-          wellPositioned = false;
-        }
-      }
     }
 
-    return DetectedFace(wellPositioned: wellPositioned, face: detectedFace!);
+    return DetectedFace(wellPositioned: wellPositioned, face: detectedFace!,isSmiling: isSmiling,isMouthOpen: isMouthOpen,isBlinking: isBlinking);
   }
 }

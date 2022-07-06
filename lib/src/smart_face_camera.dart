@@ -263,7 +263,7 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
 
           if (result != null) {
             try {
-              if (result.wellPositioned) {
+              if (result.isSmiling==true) {
                 _onTakePictureButtonPressed();
               }
             } catch (e) {
