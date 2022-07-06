@@ -1,6 +1,6 @@
 name: liveness_cam
 description: Liveness camera for detecting fraud.
-version: 0.0.4
+version: 0.0.5
 homepage: https://kakzaki.my.id
 
 environment:
