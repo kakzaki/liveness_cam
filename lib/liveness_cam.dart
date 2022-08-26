@@ -10,17 +10,18 @@ class LivenessCam {
   ///starting camera
   Future<File?> start(BuildContext context) async {
     try {
-      if(Platform.isAndroid){
+      if (Platform.isAndroid) {
         var result = await _methodChannel.invokeMethod("start");
-        if ("$result" != "null"&&"$result" != "") {
+        if ("$result" != "null" && "$result" != "") {
           return File("$result".replaceAll("file:/", ""));
         }
-      }else if(Platform.isIOS){
-        var result=  await Navigator.push(context, MaterialPageRoute(builder: (context) =>  const CameraPage()));
-        if(result!=null){
+      } else if (Platform.isIOS) {
+        var result = await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CameraPage()));
+        if (result != null) {
           return result as File;
         }
-      }else{
+      } else {
         return null;
       }
     } catch (e) {

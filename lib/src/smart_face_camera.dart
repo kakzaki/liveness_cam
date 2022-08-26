@@ -7,8 +7,6 @@ import 'scanned_image.dart';
 import 'face_painter.dart';
 import 'builders.dart';
 
-
-
 class SmartFaceCamera extends StatefulWidget {
   final String? message;
   final TextStyle messageStyle;
@@ -37,15 +35,14 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
 
   DetectedFace? _detectedFace;
 
-
   Future<void> _initCamera() async {
-    List<CameraDescription> cameras= await availableCameras();
-    cameras=cameras.where((element) => element.lensDirection==CameraLensDirection.front).toList();
+    List<CameraDescription> cameras = await availableCameras();
+    cameras = cameras
+        .where((element) => element.lensDirection == CameraLensDirection.front)
+        .toList();
     if (cameras.isNotEmpty) {
-      _controller = CameraController(cameras.first,
-          ResolutionPreset.medium,
-          enableAudio: true,
-          imageFormatGroup: ImageFormatGroup.jpeg);
+      _controller = CameraController(cameras.first, ResolutionPreset.medium,
+          enableAudio: true, imageFormatGroup: ImageFormatGroup.jpeg);
 
       await _controller!.initialize().then((_) {
         if (!mounted) {
@@ -56,8 +53,6 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
     }
     _startImageStream();
   }
-
-
 
   @override
   void initState() {
@@ -100,7 +95,8 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (cameraController != null && cameraController.value.isInitialized) ...[
+        if (cameraController != null &&
+            cameraController.value.isInitialized) ...[
           Transform.scale(
             scale: 1.0,
             child: AspectRatio(
@@ -168,7 +164,6 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
     }
     return const SizedBox.shrink();
   }
-
 
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -263,7 +258,7 @@ class _SmartFaceCameraState extends State<SmartFaceCamera>
 
           if (result != null) {
             try {
-              if (result.isSmiling==true) {
+              if (result.isSmiling == true) {
                 _onTakePictureButtonPressed();
               }
             } catch (e) {

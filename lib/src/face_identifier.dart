@@ -55,7 +55,11 @@ class FaceIdentifier {
   }
 
   static Future<DetectedFace?> _detectFace({required visionImage}) async {
-    final options = FaceDetectorOptions(enableContours: true,enableClassification: true,enableLandmarks: true,enableTracking: true);
+    final options = FaceDetectorOptions(
+        enableContours: true,
+        enableClassification: true,
+        enableLandmarks: true,
+        enableTracking: true);
     final faceDetector = FaceDetector(options: options);
     try {
       final List<Face> faces = await faceDetector.processImage(visionImage);
@@ -66,7 +70,6 @@ class FaceIdentifier {
       return null;
     }
   }
-
 
   static _extractFace(List<Face> faces) {
     //List<Rect> rect = [];
@@ -110,14 +113,18 @@ class FaceIdentifier {
       //     }
       // }
 
-      if(isMouthOpen=true){
-        if((face.smilingProbability??0)>0.8){
-          isSmiling=true;
+      if (isMouthOpen = true) {
+        if ((face.smilingProbability ?? 0) > 0.8) {
+          isSmiling = true;
         }
       }
-
     }
 
-    return DetectedFace(wellPositioned: wellPositioned, face: detectedFace!,isSmiling: isSmiling,isMouthOpen: isMouthOpen,isBlinking: isBlinking);
+    return DetectedFace(
+        wellPositioned: wellPositioned,
+        face: detectedFace!,
+        isSmiling: isSmiling,
+        isMouthOpen: isMouthOpen,
+        isBlinking: isBlinking);
   }
 }

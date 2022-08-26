@@ -37,24 +37,22 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(
                 height: 20,
               ),
-              Builder(
-                builder: (context) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        _livenessCam.start(context).then((value) {
-                          if (value != null) {
-                            setState(() {
-                              result = value;
-                            });
-                          }
-                        });
-                      },
-                      child: const Text(
-                        "Start",
-                        style: TextStyle(fontSize: 19),
-                      ));
-                }
-              )
+              Builder(builder: (context) {
+                return ElevatedButton(
+                    onPressed: () {
+                      _livenessCam.start(context).then((value) {
+                        if (value != null) {
+                          setState(() {
+                            result = value;
+                          });
+                        }
+                      });
+                    },
+                    child: const Text(
+                      "Start",
+                      style: TextStyle(fontSize: 19),
+                    ));
+              })
             ],
           ),
         ),
