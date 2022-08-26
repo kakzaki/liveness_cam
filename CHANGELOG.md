@@ -1,3 +1,7 @@
+## 0.0.6
+
+* remove deprecated api
+
 ## 0.0.5
 
 * ios.

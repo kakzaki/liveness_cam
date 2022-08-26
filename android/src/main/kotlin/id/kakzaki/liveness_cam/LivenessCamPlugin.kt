@@ -1,16 +1,11 @@
 package id.kakzaki.liveness_cam
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.NonNull
-import com.google.gson.Gson
 import id.kakzaki.face_detection.Identifier
-import id.kakzaki.face_detection.analyzer.DetectionMode
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
@@ -18,7 +13,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
-import java.io.File
+
 
 /** LivenessCamPlugin */
 class LivenessCamPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
@@ -28,50 +23,53 @@ class LivenessCamPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plugin
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private lateinit var activity : Activity
-  private lateinit var context : Context
+//  private lateinit var context : Context
+ private var pluginBinding: FlutterPluginBinding? = null
   private lateinit var result : Result
-  var LIVENESS_DETECTION_REQUEST_CODE = 101
+  private var livenessDetectionCode = 101
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "liveness_cam")
     channel.setMethodCallHandler(this)
-    context = flutterPluginBinding.applicationContext
+   // context = flutterPluginBinding.applicationContext
+    pluginBinding = flutterPluginBinding
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     this.result = result
     if (call.method == "start") {
-      activity.startActivityForResult(Identifier.getLivenessIntent(context), LIVENESS_DETECTION_REQUEST_CODE)
+     // activity.startActivityForResult(Identifier.getLivenessIntent(context), livenessDetectionCode)
+      activity.startActivityForResult(Identifier.getLivenessIntent(activity), livenessDetectionCode)
     } else {
       result.notImplemented()
     }
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    activity = binding.getActivity()
+    activity = binding.activity
     binding.addActivityResultListener(this)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-    TODO("Not yet implemented")
+    channel.setMethodCallHandler(null)
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
+    onAttachedToActivity(binding)
   }
 
   override fun onDetachedFromActivity() {
-    TODO("Not yet implemented")
+    channel.setMethodCallHandler(null)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
     if (resultCode == Activity.RESULT_OK) {
       when (requestCode) {
-        LIVENESS_DETECTION_REQUEST_CODE -> {
+        livenessDetectionCode -> {
           val livenessResult = Identifier.getLivenessResult(data)
           livenessResult?.let { res ->
             if (res.isSuccess) {
