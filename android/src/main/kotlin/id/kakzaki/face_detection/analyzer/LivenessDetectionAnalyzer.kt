@@ -13,6 +13,7 @@ import id.kakzaki.face_detection.model.LivenessResult
 import id.kakzaki.core.GraphicOverlay
 import id.kakzaki.core.utils.BitmapUtils
 import id.kakzaki.core.utils.BitmapUtils.saveBitmapToFile
+import kotlin.random.Random
 
 class LivenessDetectionAnalyzer(
     private val context: Context,
@@ -189,12 +190,13 @@ class LivenessDetectionAnalyzer(
     }
 
     private fun nextDetection() {
+        val randomNumber = Random.nextInt(1000, 9999)
         currentDetectionMode()?.let {
             val fileUri = originalBitmap?.let { bitmap ->
                 saveBitmapToFile(
                     bitmap,
                     context.externalCacheDir!!.path,
-                    "img_${it.name}.jpg")
+                    "img_${it.name}_$randomNumber.jpg")
             }
             detectionResults.add(LivenessResult.DetectionResult(it, fileUri, startDetectionTime?.let { time -> System.currentTimeMillis()-time }))
         }
